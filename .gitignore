@@ -1,0 +1,10 @@
+#Data from the database
+data/
+databases/
+*.h5ad
+*.duckdb
+
+#Python things
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
