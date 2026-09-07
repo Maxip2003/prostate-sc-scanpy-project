@@ -1,8 +1,16 @@
 import scanpy as sc
-
+import yaml
 from utils import save_fig
 
 adata = sc.read_h5ad("data/01_loaded.h5ad")
+
+# Load pipeline parameters from a single config file instead of hardcoding values, so switching datasets only means editing the YAML, not the code
+with open("config/params.yaml") as f:
+    params = yaml.safe_load(f)
+
+# Apply the QC thresholds decided from the plots above
+min_genes = params["qc"]["min_genes"]
+max_pct_mt = params["qc"]["max_pct_mt"]
 
 # Recompute QC metrics on raw counts (X in this dataset holds processed values)
 adata.var["mt"] = adata.var["feature_name"].str.startswith("MT-")
@@ -22,8 +30,8 @@ save_fig(sc.pl.violin(adata, ["pct_counts_mt"], jitter=0.3, show=False), "violin
 # Apply the QC thresholds decided from the plots above
 n_before = adata.n_obs
 
-adata = adata[adata.obs["n_genes_by_counts"] >= 500, :]
-adata = adata[adata.obs["pct_counts_mt"] <= 20, :]
+adata = adata[adata.obs["n_genes_by_counts"] >= min_genes, :]
+adata = adata[adata.obs["pct_counts_mt"] <= max_pct_mt, :]
 
 n_after = adata.n_obs
 print(f"Cells before filtering: {n_before}")

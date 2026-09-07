@@ -1,18 +1,24 @@
 import scanpy as sc
 import pandas as pd
-
+import yaml 
 from utils import save_fig
 
 adata = sc.read_h5ad("data/03_clustered.h5ad")
 
+with open("config/params.yaml") as f:
+    params = yaml.safe_load(f)
+
+n_pcs = params["clustering"]["n_pcs"]
+resolution = params["clustering"]["leiden_resolution"]
+
 # Build a neighborhood graph using the first 15 PCs chosen from the elbow plot
-sc.pp.neighbors(adata, n_pcs=15)
+sc.pp.neighbors(adata, n_pcs=n_pcs)
 
 # Compute UMAP coordinates for visualization
 sc.tl.umap(adata)
 
 # Cluster cells into groups based on their neighborhood graph
-sc.tl.leiden(adata, resolution=1.0, flavor="igraph", n_iterations=2, directed=False)
+sc.tl.leiden(adata, resolution=resolution, flavor="igraph", n_iterations=2, directed=False)
 
 # Visualize clusters alongside the cell types already annotated in this dataset
 ax = sc.pl.umap(adata, color=["leiden", "cell_type"], show=False)

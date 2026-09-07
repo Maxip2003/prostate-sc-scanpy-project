@@ -1,6 +1,10 @@
 import scanpy as sc
+import yaml
 
-adata = sc.read_h5ad("data/data.h5ad")
+with open("config/params.yaml") as f:
+    params = yaml.safe_load(f)
+
+adata = sc.read_h5ad(params["dataset"]["input_path"])
 
 # Use gene symbols instead of Ensembl IDs as var_names, so downstream
 # scripts can reference genes of interest (KLK3, PCA3...) directly.

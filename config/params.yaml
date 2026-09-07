@@ -1,0 +1,14 @@
+dataset:
+  input_path: "data/data_full.h5ad"
+  accession: "68b23fda-7191-46a5-8870-819feca3e66e"
+  source_url: "https://cellxgene.cziscience.com/collections/bdac7a53-fe34-4f04-8c46-f9bd5297c099"
+  download_date: "07/09/2026"
+  n_cells_raw: 68322   # pendiente, lo rellenamos en cuanto lo cargues
+
+qc:
+  min_genes: 500      # provisional, se revisa con las gráficas del dataset grande
+  max_pct_mt: 20       # provisional, se revisa con las gráficas del dataset grande
+
+clustering:
+  n_pcs: 15             # provisional, se revisa con el nuevo elbow plot
+  leiden_resolution: 1.0
