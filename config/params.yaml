@@ -7,8 +7,12 @@ dataset:
 
 qc:
   min_genes: 500      # provisional, se revisa con las gráficas del dataset grande
+  max_genes: 7000      # provisional, se revisa con las gráficas del dataset grande
   max_pct_mt: 20       # provisional, se revisa con las gráficas del dataset grande
 
 clustering:
-  n_pcs: 15             # provisional, se revisa con el nuevo elbow plot
+  n_pcs: 12             # provisional, se revisa con el nuevo elbow plot
   leiden_resolution: 1.0
+
+sanity_check:
+  positive_control_gene: KLK3

@@ -30,7 +30,11 @@ print("Saved to data/04_annotated.h5ad")
 crosstab = pd.crosstab(adata.obs["leiden"], adata.obs["cell_type"])
 print(crosstab)
 
-# Sanity check: KLK3 should be high in luminal cells
-ax = sc.pl.violin(adata, ["KLK3"], groupby="cell_type", rotation=90, show=False)
-save_fig(ax, "violin_klk3_check.png")
+# Sanity check: a marker gene known to be high in a specific cell type,
+# confirms the pipeline's biology looks right before trusting the results
+positive_control_gene = params["sanity_check"]["positive_control_gene"]
+
+ax = sc.pl.violin(adata, [positive_control_gene], groupby="cell_type", rotation=90, show=False)
+save_fig(ax, f"violin_{positive_control_gene.lower()}_check.png")
+print(f"Sanity check saved: figures/violin_{positive_control_gene.lower()}_check.png")
 
