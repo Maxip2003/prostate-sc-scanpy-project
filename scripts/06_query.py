@@ -1,11 +1,18 @@
 import argparse
 import duckdb
+import yaml
 
 parser = argparse.ArgumentParser(description="Query gene expression by cell cluster")
 parser.add_argument("--gene", required=True, help="Gene symbol, e.g. PCA3")
+parser.add_argument("--config", default="config/params.yaml")
 args = parser.parse_args()
 
-con = duckdb.connect("databases/prostate.duckdb")
+with open(args.config) as f:
+    params = yaml.safe_load(f)
+
+db_path = params["dataset"]["db_path"]
+
+con = duckdb.connect(db_path)
 
 result = con.execute("""
     SELECT

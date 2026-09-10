@@ -1,8 +1,15 @@
+import argparse
 import scanpy as sc
 import yaml
 
-with open("config/params.yaml") as f:
+parser = argparse.ArgumentParser()
+parser.add_argument("--config", default="config/params.yaml")
+args = parser.parse_args()
+
+with open(args.config) as f:
     params = yaml.safe_load(f)
+
+output_dir = params["dataset"]["output_dir"]
 
 adata = sc.read_h5ad(params["dataset"]["input_path"])
 
@@ -21,5 +28,5 @@ adata.var.index.name = None
 
 print(f"Loaded: {adata.n_obs} cells, {adata.n_vars} genes")
 
-adata.write("data/01_loaded.h5ad")
-print("Saved to data/01_loaded.h5ad")
+adata.write(f"{output_dir}/01_loaded.h5ad")
+print(f"Saved to {output_dir}/01_loaded.h5ad")

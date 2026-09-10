@@ -1,0 +1,18 @@
+dataset:
+  input_path: "data/data.h5ad"
+  output_dir: "data/test"
+  db_path: "databases/test_prostate.duckdb"
+  accession: "4d0a653a-291d-44f6-966d-c3a7f1f3bd09"
+  source_url: "https://cellxgene.cziscience.com/collections/bdac7a53-fe34-4f04-8c46-f9bd5297c099"
+  download_date: "2026-08-19"
+
+qc:
+  min_genes: 500
+  max_pct_mt: 20
+
+clustering:
+  n_pcs: 15
+  leiden_resolution: 1.0
+
+sanity_check:
+  positive_control_gene: KLK3
