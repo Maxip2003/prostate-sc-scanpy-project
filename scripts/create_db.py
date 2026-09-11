@@ -1,4 +1,5 @@
 import argparse
+from pathlib import Path
 import duckdb
 import yaml
 
@@ -11,11 +12,12 @@ with open(args.config) as f:
 
 db_path = params["dataset"]["db_path"]
 
-# Creates a fresh .duckdb file (or connects to it if it already exists)
+# Ensure the parent directory exists before creating the database file —
+# git doesn't track empty folders, so a fresh clone won't have it yet
+Path(db_path).parent.mkdir(parents=True, exist_ok=True)
+
 con = duckdb.connect(db_path)
 
-# Apply the table definitions — will fail if the tables already exist,
-# which is intentional: it protects against silently overwriting a schema
 with open("scripts/schema.sql") as f:
     con.execute(f.read())
 

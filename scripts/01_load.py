@@ -1,4 +1,5 @@
 import argparse
+from pathlib import Path
 import scanpy as sc
 import yaml
 
@@ -10,6 +11,10 @@ with open(args.config) as f:
     params = yaml.safe_load(f)
 
 output_dir = params["dataset"]["output_dir"]
+
+# Ensure the output directory exists — git doesn't track empty folders,
+# so a fresh clone (like in CI) won't have it yet
+Path(output_dir).mkdir(parents=True, exist_ok=True)
 
 adata = sc.read_h5ad(params["dataset"]["input_path"])
 
