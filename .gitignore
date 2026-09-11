@@ -1,8 +1,9 @@
 #Data from the database
-data/
+data/*
+!data/data.h5ad
 databases/
 *.h5ad
-*.duckdb
+!data/data.h5ad
 
 #Python things
 __pycache__/
