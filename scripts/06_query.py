@@ -14,6 +14,8 @@ db_path = params["dataset"]["db_path"]
 
 con = duckdb.connect(db_path)
 
+# JOIN pulls in cluster metadata (cell type, size) alongside the expression
+# numbers, which live in separate tables by design
 result = con.execute("""
     SELECT
         c.leiden_label,

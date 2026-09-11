@@ -26,14 +26,17 @@ adata = sc.read_h5ad(f"{output_dir}/04_annotated.h5ad")
 
 con = duckdb.connect(d["db_path"])
 
+# Clear existing rows so this script can be re-run safely without duplicating data
 con.execute("DELETE FROM gene_expression_summary")
 con.execute("DELETE FROM clusters")
 con.execute("DELETE FROM qc_metrics")
 con.execute("DELETE FROM datasets")
 con.execute("DELETE FROM runs")
 
+# Read the raw cell count directly from the pre-QC file (backed mode: no full load)
 n_cells_raw = sc.read_h5ad(f"{output_dir}/01_loaded.h5ad", backed="r").n_obs
 
+# --- 1. datasets ---
 dataset_row = pd.DataFrame([{
     "id": 1, "accession": d["accession"], "n_cells_raw": n_cells_raw,
     "n_cells_after_qc": adata.n_obs, "download_date": d["download_date"],
@@ -41,6 +44,7 @@ dataset_row = pd.DataFrame([{
 }])
 con.execute("INSERT INTO datasets SELECT * FROM dataset_row")
 
+# --- 2. qc_metrics ---
 qc_row = pd.DataFrame([{
     "id": 1, "dataset_id": 1, "min_genes_threshold": q["min_genes"],
     "max_pct_mt_threshold": q["max_pct_mt"],
@@ -49,6 +53,7 @@ qc_row = pd.DataFrame([{
 }])
 con.execute("INSERT INTO qc_metrics SELECT * FROM qc_row")
 
+# --- 3. clusters ---
 crosstab = pd.crosstab(adata.obs["leiden"], adata.obs["cell_type"])
 
 cluster_rows = []
@@ -69,9 +74,13 @@ for leiden_label, row in crosstab.iterrows():
 clusters_df = pd.DataFrame(cluster_rows)
 con.execute("INSERT INTO clusters SELECT * FROM clusters_df")
 
+# --- 4. gene_expression_summary ---
 expr_rows = []
 next_expr_id = 1
 for gene, ensembl_id in gene_ids.items():
+    # Look up the row by symbol to get expression values, but always store the
+    # Ensembl ID verified in config/genes.yaml — never whatever the file's own
+    # index happens to use (it can mix Ensembl codes and gene symbols)
     match = adata.raw.var.loc[adata.raw.var["feature_name"] == gene]
     if match.empty:
         print(f"Warning: {gene} not found, skipping")
@@ -95,6 +104,9 @@ for gene, ensembl_id in gene_ids.items():
 expr_df = pd.DataFrame(expr_rows)
 con.execute("INSERT INTO gene_expression_summary SELECT * FROM expr_df")
 
+# --- 5. runs ---
+# Log the exact commit and versions used, so any result can be traced back to
+# the code that produced it
 git_commit = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"], text=True).strip()
 
 run_row = pd.DataFrame([{

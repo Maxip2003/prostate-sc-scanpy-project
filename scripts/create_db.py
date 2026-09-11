@@ -11,8 +11,11 @@ with open(args.config) as f:
 
 db_path = params["dataset"]["db_path"]
 
+# Creates a fresh .duckdb file (or connects to it if it already exists)
 con = duckdb.connect(db_path)
 
+# Apply the table definitions — will fail if the tables already exist,
+# which is intentional: it protects against silently overwriting a schema
 with open("scripts/schema.sql") as f:
     con.execute(f.read())
 
