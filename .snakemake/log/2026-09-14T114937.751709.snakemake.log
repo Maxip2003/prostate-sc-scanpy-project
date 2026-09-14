@@ -1,0 +1,108 @@
+Assuming unrestricted shared filesystem usage.
+
+SNAKEMAKE
+=========
+  Date: 2026-09-14 11:49:37
+  Workflow ID: e1f06a96-5329-4056-b59b-8a208cc34029
+  Platform: Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39
+  Host: DESKTOP-LEI2DGJ
+  User: pedro
+  Snakemake version: 9.27.0
+  Python version: 3.11.15 | packaged by conda-forge | (main, Aug 11 2026, 10:26:29) [GCC 14.4.0]
+  Command: /home/pedro/miniconda3/envs/prostata/bin/snakemake --cores 1
+  Snakefile: /mnt/c/Users/Usuario/Desktop/Scanpy/Snakefile
+  Base directory: /mnt/c/Users/Usuario/Desktop/Scanpy
+  Run directory: /mnt/c/Users/Usuario/Desktop/Scanpy
+  Working directory: /mnt/c/Users/Usuario/Desktop/Scanpy
+  Config file(s): []
+  Config MD5: 99914b932bd37a50b983c5e7c90ae93b
+
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Job stats:
+job           count
+----------  -------
+load              1
+clean             1
+cluster           1
+annotate          1
+load_to_db        1
+all               1
+total             6
+
+Select jobs to execute...
+Execute 1 jobs...
+[Mon Sep 14 11:49:37 2026]
+localrule load:
+    input: config/params.yaml
+    output: data/01_loaded.h5ad
+    jobid: 5
+    reason: Updated input files: config/params.yaml
+    resources: tmpdir=/tmp
+[Mon Sep 14 11:50:24 2026]
+Finished jobid: 5 (Rule: load)
+1 of 6 steps (17%) done
+Select jobs to execute...
+Execute 1 jobs...
+[Mon Sep 14 11:50:24 2026]
+localrule clean:
+    input: data/01_loaded.h5ad
+    output: data/02_cleaned.h5ad
+    jobid: 4
+    reason: Input files updated by another job: data/01_loaded.h5ad
+    resources: tmpdir=/tmp
+[Mon Sep 14 11:51:05 2026]
+Finished jobid: 4 (Rule: clean)
+2 of 6 steps (33%) done
+Select jobs to execute...
+Execute 1 jobs...
+[Mon Sep 14 11:51:05 2026]
+localrule cluster:
+    input: data/02_cleaned.h5ad
+    output: data/03_clustered.h5ad
+    jobid: 3
+    reason: Input files updated by another job: data/02_cleaned.h5ad
+    resources: tmpdir=/tmp
+[Mon Sep 14 11:51:54 2026]
+Finished jobid: 3 (Rule: cluster)
+3 of 6 steps (50%) done
+Select jobs to execute...
+Execute 1 jobs...
+[Mon Sep 14 11:51:54 2026]
+localrule annotate:
+    input: data/03_clustered.h5ad
+    output: data/04_annotated.h5ad
+    jobid: 2
+    reason: Input files updated by another job: data/03_clustered.h5ad
+    resources: tmpdir=/tmp
+[Mon Sep 14 11:53:32 2026]
+Finished jobid: 2 (Rule: annotate)
+4 of 6 steps (67%) done
+Select jobs to execute...
+Execute 1 jobs...
+[Mon Sep 14 11:53:32 2026]
+localrule load_to_db:
+    input: data/04_annotated.h5ad, databases/prostate.duckdb
+    output: data/.pipeline_complete
+    jobid: 1
+    reason: Missing output files: data/.pipeline_complete; Input files updated by another job: data/04_annotated.h5ad
+    resources: tmpdir=/tmp
+Touching output file data/.pipeline_complete.
+[Mon Sep 14 11:53:46 2026]
+Finished jobid: 1 (Rule: load_to_db)
+5 of 6 steps (83%) done
+Select jobs to execute...
+Execute 1 jobs...
+[Mon Sep 14 11:53:46 2026]
+localrule all:
+    input: data/.pipeline_complete
+    jobid: 0
+    reason: Input files updated by another job: data/.pipeline_complete
+    resources: tmpdir=/tmp
+[Mon Sep 14 11:53:46 2026]
+Finished jobid: 0 (Rule: all)
+6 of 6 steps (100%) done
+Complete log(s): /mnt/c/Users/Usuario/Desktop/Scanpy/.snakemake/log/2026-09-14T114937.751709.snakemake.log
+Elapsed time: 0:04:08.878495

@@ -2,7 +2,7 @@ import argparse
 import scanpy as sc
 import yaml
 
-# Accept a config file from the command line, defaulting to the real dataset —
+# Accept a config file from the command line, defaulting to the real dataset
 # lets this script run against either the real or the test config without edits
 parser = argparse.ArgumentParser()
 parser.add_argument("--config", default="config/params.yaml")
@@ -11,7 +11,7 @@ args = parser.parse_args()
 with open(args.config) as f:
     params = yaml.safe_load(f)
 
-# This script always reads the ORIGINAL CELLxGENE file, never a processed one —
+# This script always reads the ORIGINAL CELLxGENE file, never a processed one
 # var_names here are still Ensembl IDs, so we can look genes up directly by code
 adata = sc.read_h5ad(params["dataset"]["input_path"])
 

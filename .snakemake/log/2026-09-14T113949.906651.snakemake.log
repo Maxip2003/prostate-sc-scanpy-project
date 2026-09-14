@@ -1,0 +1,21 @@
+Assuming unrestricted shared filesystem usage.
+
+SNAKEMAKE
+=========
+  Date: 2026-09-14 11:39:49
+  Workflow ID: 6aa07bd4-50c8-4b8b-b103-dc37f5091f4b
+  Platform: Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39
+  Host: DESKTOP-LEI2DGJ
+  User: pedro
+  Snakemake version: 9.27.0
+  Python version: 3.11.15 | packaged by conda-forge | (main, Aug 11 2026, 10:26:29) [GCC 14.4.0]
+  Command: /home/pedro/miniconda3/envs/prostata/bin/snakemake --cores 1 --config config_path=config/params.test.yaml
+  Snakefile: /mnt/c/Users/Usuario/Desktop/Scanpy/Snakefile
+  Base directory: /mnt/c/Users/Usuario/Desktop/Scanpy
+  Run directory: /mnt/c/Users/Usuario/Desktop/Scanpy
+  Working directory: /mnt/c/Users/Usuario/Desktop/Scanpy
+  Config file(s): []
+  Config MD5: 70f0a7069132f858cfcb99381894e96f
+
+Building DAG of jobs...
+Nothing to be done (all requested files are present and up to date).
